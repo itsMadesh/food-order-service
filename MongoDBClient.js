@@ -12,7 +12,6 @@ class MongoDB {
     static connect() {
         console.log("Connecting to mongo server");
         return new Promise((resolve, reject) => {
-            console.log(config.mongodb);
             MongoClient.connect(config.mongodb.url, { useUnifiedTopology: true }, function (err, client) {
                 if (err) return reject(err);
                 console.log("Connected successfully to mongo server");
@@ -22,8 +21,16 @@ class MongoDB {
         })
     }
 
-    static items() {
-        return db.collection("items");
+    static stores() {
+        return db.collection("stores");
+    }
+
+    static users(){
+        return db.collection("users");
+    }
+
+    static orders(){
+        return db.collection("orders");
     }
 
 }
