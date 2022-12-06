@@ -2,7 +2,6 @@ import React from "react"
 import Request from "./Request";
 import { toast } from "react-toastify";
 import "./style/storemanage.css";
-import Modal from "./Modal.jsx";
 import { Link, Route, Switch } from "react-router-dom";
 import OrderHistory from "./OrderHistory.jsx";
 
@@ -116,7 +115,6 @@ export default class extends React.Component {
     handleLogout = () => {
         Request.delete("/logout").then((res) => {
             location.reload();
-            // toast.success(res.message);
         }).catch((err) => {
             toast.error(err.message);
         })

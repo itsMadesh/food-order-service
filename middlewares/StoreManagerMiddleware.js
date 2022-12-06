@@ -18,17 +18,6 @@ class StoreManagerMiddleware {
             res.status(500).json({ message: "Unexpected error occured" })
         }
     }
-
-    static async isValidItem(req, res, next) {
-        try {
-
-        }
-        catch (e) {
-            console.log(e);
-            res.status(500).json({ message: "Unexpected error occured" })
-        }
-    }
-
     static isUserLoggedIn(req,res,next){
         if(req.session.user !=null && req.session.user.userType=="store"){
             return next();

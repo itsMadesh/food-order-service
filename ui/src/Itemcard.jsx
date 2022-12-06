@@ -54,7 +54,7 @@ export default class extends React.Component {
             <div className="d-flex">
                 <div className="card-body">
                     <span className="card-title fw-bold">{item.name}</span>
-                    {/* <h6 className="card-subtitle mb-2 text-muted">{item.category}</h6> */}
+                    <p className="card-subtitle mb-2 text-muted">{item.category}</p>
                     <p className="card-text">Rs.{item.price}</p>
                 </div>
                 <div className="ms-5 d-flex flex-column">

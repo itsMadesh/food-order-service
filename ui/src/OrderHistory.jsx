@@ -29,7 +29,7 @@ export default class extends React.Component {
         return total;
     }
 
-    getUserStatusView = () => {
+    getUserStatusView = (order) => {
         return <div>
             <div className="fw-bold">Status</div>
             <div className={"ms-auto badge bg-" + (order.status == "cancelled" ? "danger" : "info")} >{order.status}</div>
@@ -90,7 +90,7 @@ export default class extends React.Component {
         </div>
     }
 
-    componentDidMount() {
+    componentDidMount() { 
         this.fetchOrderHistory();
     }
 }

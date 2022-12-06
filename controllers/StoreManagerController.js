@@ -125,8 +125,7 @@ class StoreManagerController {
 
     static async updateStatus(req, res) {
         try {
-            const resp = await MongoDBClient.orders().updateOne({ "_id": ObjectId(req.params.id) }, { $set: { status: req.body.status } });
-            console.log(resp);
+            const resp = await MongoDBClient.orders().updateOne({ "_id": ObjectID(req.params.id) }, { $set: { status: req.body.status } });
             res.status(200).json(resp);
         } catch (e) {
             res.json({ "message": e })
