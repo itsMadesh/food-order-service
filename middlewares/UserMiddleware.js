@@ -17,22 +17,47 @@ class UserMiddleware {
             res.status(500).json({ message: "Unexpected error occured" })
         }
     }
-    static signup(req, res, next) {
-        MongoDBClient.users().find({ "email": req.body.email }).toArray((err, result) => {
-            if (err) res.json(err);
-            if (result.length > 0) {
-                res.send("Email already exists");
-                return;
+    static async isValidEmail(req, res, next) {
+        try{
+            if (!req.body.email.endsWith("@ssn.edu.in")) {
+                return res.status(401).json({"message":"Email should be SSN official Email-ID"});
+            }    
+            const resp= await MongoDBClient.users().find({ "email": req.body.email }).toArray()
+            if (resp.length > 0) {
+                return res.status(401).json({"message":"Email already exists"});
             }
-            else {
-                if (req.body.pwd != req.body.cpwd) {
-                    res.send("Password does not match");
-                    return;
-                }
-            }
-            console.log("Validation done!");
             next();
-        });
+        }
+        catch(e){
+            res.status(404).json({"message":e})
+        }
+    }
+    static async isValidData(req,res,next){
+        try{
+            if(!req.session.email){
+                return res.status(401).json({"message":"Email-Id does not exist"});
+            }
+            next();
+        }
+        catch(e){
+            res.status(404).json({"message":e})
+        }
+    }
+
+    static async isValidOTP(req,res,next){
+        try{
+            const result = await MongoDBClient.users().findOne({"email":req.session.email});
+            if(!result){
+                return res.status(401).json({"message":"Email does not exist"});
+            }
+            if(result.otp != Number(req.body.otp)){
+                return res.status(401).json({"message":"OTP is incorrect"});
+            }
+            next();
+        }
+        catch(e){
+            res.status(404).json({"message":e});
+        }
     }
 
     static isUserLoggedIn(req,res,next){
@@ -41,6 +66,7 @@ class UserMiddleware {
         }
         return res.status(401).json({"message":"User not logged in"});
     }
+    static isValid
 }
 
 module.exports = UserMiddleware;

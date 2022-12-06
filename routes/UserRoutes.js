@@ -5,7 +5,12 @@ const UserMiddleware = require("../middlewares/UserMiddleware")
 
 router.post("/signin", UserMiddleware.isValidUser, UserController.signin);
 
-router.post("/signup", UserMiddleware.signup, UserController.signup);
+router.post("/init-signup", UserMiddleware.isValidEmail, UserController.createNewUser);
+
+router.post("/signup", UserMiddleware.isValidData, UserController.signup);
+
+
+router.post("/verifyOTP", UserMiddleware.isValidOTP,UserController.verifyOTP);
 
 router.get("/store", UserController.storeInfo);
 

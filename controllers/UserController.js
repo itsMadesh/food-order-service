@@ -1,4 +1,6 @@
 const MongoDBClient = require("../MongoDBClient");
+const OTPUtil = require("../services/OTPUtil");
+const NodeMailer = require("../services/NodeMailer");
 const _ = require("lodash");
 const { ObjectID } = require("bson");
 
@@ -12,24 +14,68 @@ class UserController {
             res.json({ "message": e })
         }
     }
-    static async signup(req, res) {
+
+    static async createNewUser(req, res) {
         try {
-            const user = {
-                "name": req.body.name,
-                "email": req.body.email,
-                "phone": req.body.phone,
-                "pwd": req.body.pwd,
-                "cart": [],
+            console.log("createNewUser");
+            const data = {
+                email: req.body.email,
+                verified: false,
+                otp: OTPUtil.generateOTP(),
+                createdAt: new Date()
             }
-            const resp = await MongoDBClient.users().insertOne(user);
-            const result = await MongoDBClient.users().findOne({ "email": req.body.email });
-            console.log(result);
-            req.session.user = { id: result._id, email: req.body.email, userType: "user" };
-            res.status(200).json({ "message": "Successfully Signed Up" });
+            const resp = await MongoDBClient.users().insertOne(data);
+            req.session.email = req.body.email;
+            NodeMailer.sendOTP(data.email, data.otp);
+            res.status(200).json({ "message": "check your email for OTP" });
         } catch (e) {
+            console.log(e);
             res.json({ "message": e })
         }
     }
+
+    static async verifyOTP(req, res) {
+        try {
+            const query = { "email": req.session.email };
+            const set = { $set: { verified: true } };
+            const resp = await MongoDBClient.users().updateOne(query, set);
+            console.log(resp);
+            if (resp.modifiedCount == 1) {
+                return res.status(200).json({ "message": "Email verified successfully" });
+            }
+            return res.status(401).json({ "message": "Can't verify Email" })
+
+        }
+        catch (e) {
+            res.json({ "message": e })
+        }
+    }
+    static async signup(req, res) {
+        try {
+            const data = {
+                phone:Number(req.body.phone),
+                name:req.body.name,
+                pwd:req.body.pwd,
+                cart:null,
+                version:1
+            }
+            const query = { "email": req.session.email };
+            const set = { $set:  data };
+            const resp = await MongoDBClient.users().updateOne(query, set);
+            if (resp.modifiedCount == 0) {
+                return res.status(401).json({ "message": "User does not exist" })
+            }
+            const result = await MongoDBClient.users().findOne({ "email": req.session.email });
+            req.session.user = { id: result._id, email: result.email, userType: "user" };
+            req.session.email=null;
+            res.status(200).json({ "message": "Successfully Signed Up" });
+
+        }
+        catch (e) {
+            res.json({ "message": e })
+        }
+    }
+
     static async storeInfo(req, res) {
         try {
             const resp = await MongoDBClient.stores().find({}).toArray();

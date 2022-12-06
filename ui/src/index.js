@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Home from "./Home.jsx";
 import Signin from "./Signin.jsx";
-import Signup from "./Signup.jsx";
+import InitSignup from "./InitSignup.jsx";
 import StoreHome from "./StoreHome.jsx"
 import UserHome from "./UserHome.jsx";
 
@@ -39,7 +39,7 @@ function App() {
         <Router>
             <Switch>
                 <Route path={"/user-signin"} render={() => <Signin userType="user" />} />
-                <Route path={"/user-signup"} render={() => <Signup url={"/user/signup"} redirectTo={"/user"} />} />
+                <Route path={"/user-signup"} render={() => <InitSignup url={"/user/"} redirectTo={"/user"} />} />
                 <Route path={"/store-signin"} render={() => <Signin userType="store" />} />
                 <Route path={"/user"} render={(props) => <UserHome userInfo={userInfoJson} {...props} />} />
                 <Route path={"/store"} render={(props) => <StoreHome userInfo={userInfoJson} {...props} />} />

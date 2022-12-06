@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const MongoDBClient = require("./MongoDBClient");
+const NodeMailer = require("./services/NodeMailer");
 const cookieSession = require("cookie-session");
 const _ = require("lodash");
 
@@ -32,6 +33,7 @@ app.get("/*", function (req, res) {
 
 (async function () {
     await MongoDBClient.connect();
+    await NodeMailer.createTransporter();
     const port = process.env.PORT || 5000;
     app.listen(port, async function (err) {
         if (err) throw err;
