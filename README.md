@@ -21,3 +21,61 @@
 2. Run below command to build
 
 `npm start`
+
+## Screenshots
+### Signup
+<img src="./screenshots/initsignup.png"/>
+
+### OTP Verification
+<img src="./screenshots/otp.png"/>
+
+### Sample Mail Format
+<img src="./screenshots/email.png"/>
+
+### Store Signin
+<img src="./screenshots/storesignin.png"/>
+
+### User Signin
+<img src="./screenshots/userignin.png"/>
+
+### User Items 
+<img src="./screenshots/items.png"/>
+
+### User Items with checkout
+<img src="./screenshots/itemswithcheckout.png"/>
+
+### User Cart 
+<img src="./screenshots/cart.png"/>
+
+### User Orders
+<img src="./screenshots/ordersHistory.png"/>
+
+### Store Items 
+<img src="./screenshots/storeitems.png"/>
+
+### Store Add Category 
+<img src="./screenshots/category.png"/>
+
+### Store Add item 
+<img src="./screenshots/additem.png"/>
+
+### Store Update item 
+<img src="./screenshots/updateitem.png"/>
+
+### Store Delete item 
+<img src="./screenshots/deleteitem.png"/>
+
+### Store Orders 
+<img src="./screenshots/orders.png"/>
+
+
+
+
+
+
+
+
+
+
+
+
