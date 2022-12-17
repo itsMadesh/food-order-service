@@ -3,7 +3,7 @@ import Request from "./Request";
 
 export default class extends React.Component {
 
-    state = { orders: [] }
+    state = { orders: []    }
 
     fetchOrderHistory = () => {
         Request.get("/" + this.props.userInfo.userType + "/orders")
@@ -13,6 +13,7 @@ export default class extends React.Component {
             });
     }
 
+   
     getItemView = (item, key) => {
         return <li className="list-group-item" key={key}>
             <div className="text-truncate">{item.name}</div>
@@ -54,6 +55,7 @@ export default class extends React.Component {
                     <option value="cancelled">Cancelled</option>
                 </select>
             </div>
+            <div>{"Ordered Date:"+order.createdat}</div>
         </div>;
     }
 
@@ -78,7 +80,7 @@ export default class extends React.Component {
                     </li>
                 </ul>
             </div>
-        </div>;
+        </div>; 
     }
 
     render() {

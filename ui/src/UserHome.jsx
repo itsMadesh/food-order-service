@@ -42,8 +42,7 @@ export default class extends React.Component {
                 const currentStoreCart = cart[this.state.storeId] || {};
                 console.log("currentStoreCart:", currentStoreCart);
                 for (let key in currentStoreCart) {
-                    const matchingItem = this.state.items.filter(item => item._id.indexOf(key) == 0 && item.Available);
-                    console.log("matchingItem:", matchingItem)
+                    // const matchingItem = this.state.items.filter(item => item._id.indexOf(key) == 0 && item.Available);
                     if (this.state.items.filter(item => item._id.indexOf(key) == 0 && item.Available == "true" && item.version == currentStoreCart[key].version).length == 0) {
                         toast.success(currentStoreCart[key].name + " is no longer available. So removed from your cart.")
                         delete currentStoreCart[key];
@@ -54,24 +53,24 @@ export default class extends React.Component {
                 this.setState({ cart });
             })
             .catch(err => {
-                // toast.error(err.message);
+                toast.error(err.message);
             })
     }
 
     handleLogout = () => {
         Request.delete("/logout").then((res) => {
             location.reload();
-            // toast.success(res.message);
         }).catch((err) => {
             toast.error(err.message);
         })
     }
 
     getStoreItemsView = () => {
-        return this.state.items.filter(item => item.Available == "true").filter(item => item.name.indexOf(this.state.search) != -1).map((item, key) => {
+        return this.state.items.filter(item => item.Available == "true").filter(item => item.name.toLowerCase().indexOf(this.state.search.toLowerCase()) != -1).map((item, key) => {
             return <Itemcard key={key} item={item} cart={this.state.cart} storeId={this.state.storeId} refresh={() => this.forceUpdate()} />
         })
     }
+
     getCartItemsView = () => {
         const currentStoreCart = this.state.cart[this.state.storeId] ? this.state.cart[this.state.storeId] : {};
         return Object.values(currentStoreCart).map((item, key) => {
@@ -109,6 +108,9 @@ export default class extends React.Component {
                         </li>
                         <li className="nav-item">
                             <Link className={"nav-link " + (this.props.location.pathName == "/user/orders" ? "active" : "")} to="/user/orders">Your Orders</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className={"nav-link " + (this.props.location.pathName == "/user/favourites" ? "active" : "")} to="/user/favourites">Favourite Items</Link>
                         </li>
                     </ul>
                     <div className="d-flex">

@@ -5,15 +5,18 @@ const StoreManagerMiddleware = require("../middlewares/StoreManagerMiddleware")
 
 router.post("/signin", StoreManagerMiddleware.isValidStore, StoreManagerController.signin);
 
-router.get("/info", StoreManagerController.getInfo);
+router.get("/info", StoreManagerMiddleware.isUserLoggedIn,StoreManagerController.getInfo);
 
-router.get("/item/:itemId", StoreManagerController.getItem)
+router.get("/item/:itemId",StoreManagerMiddleware.isUserLoggedIn, StoreManagerController.getItem)
 
-router.post("/item", StoreManagerController.addItem);
+router.post("/item",StoreManagerMiddleware.isUserLoggedIn, StoreManagerController.addItem);
 
-router.delete("/item/:itemId", StoreManagerController.removeItem);
+router.post("/category",StoreManagerMiddleware.isUserLoggedIn, StoreManagerController.addCategory);
 
-router.put("/item/:itemId", StoreManagerController.updateItem);
+
+router.delete("/item/:itemId",StoreManagerMiddleware.isUserLoggedIn,StoreManagerController.removeItem);
+
+router.put("/item/:itemId",StoreManagerMiddleware.isUserLoggedIn, StoreManagerController.updateItem);
 
 router.get("/orders", StoreManagerMiddleware.isUserLoggedIn, StoreManagerController.getOrders);
 

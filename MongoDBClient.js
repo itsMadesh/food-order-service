@@ -12,10 +12,10 @@ class MongoDB {
     static connect() {
         console.log("Connecting to mongo server");
         return new Promise((resolve, reject) => {
-            MongoClient.connect(config.mongodb.url, { useUnifiedTopology: true }, function (err, client) {
+            MongoClient.connect("mongodb://localhost:27017", { useUnifiedTopology: true }, function (err, client) {
                 if (err) return reject(err);
                 console.log("Connected successfully to mongo server");
-                db = client.db(config.mongodb.dbName);
+                db = client.db(config.mongodb.dbName);  
                 resolve();
             });
         })

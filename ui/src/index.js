@@ -9,28 +9,6 @@ import InitSignup from "./InitSignup.jsx";
 import StoreHome from "./StoreHome.jsx"
 import UserHome from "./UserHome.jsx";
 
-function getRoutes() {
-    const userInfo = document.querySelector("meta[name='user-info']").getAttribute("value");
-    if (userInfo == "") {
-        return [
-            <Route exact path={"/"} component={Home} />,
-            <Route exact path={"/user/signin"} component={() => <Signin url={"/user/signin"} redirectTo={"/user/home"} />} />,
-            <Route exact path={"/store/signin"} component={() => <Signin url={"/store/signin"} redirectTo={"/store/home"} />} />
-        ];
-    }
-    const userInfoJson = JSON.parse(userInfo);
-    switch (userInfoJson["userType"]) {
-        case "user": return [
-            <Route exact path={"/user"} component={() => <UserHome userInfo={userInfoJson} />} />,
-            <Redirect to={"/user"} />,
-        ];
-        case "store": return [
-            <Route exact path={"/store"} component={() => <StoreHome userInfo={userInfoJson} />} />,
-            <Redirect to={"/store"} />,
-        ]
-    }
-}
-
 function App() {
     const userInfo = document.querySelector("meta[name='user-info']").getAttribute("value");
     const userInfoJson = userInfo == "{}" ? null : JSON.parse(userInfo);

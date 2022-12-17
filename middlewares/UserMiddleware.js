@@ -66,7 +66,6 @@ class UserMiddleware {
         }
         return res.status(401).json({"message":"User not logged in"});
     }
-    static isValid
 }
 
 module.exports = UserMiddleware;
