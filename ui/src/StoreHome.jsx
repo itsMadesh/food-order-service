@@ -18,6 +18,7 @@ export default class extends React.Component {
             category: "",
             _id: "",
         },
+        new_category:"",
         showModal: false
     }
 
@@ -64,6 +65,20 @@ export default class extends React.Component {
     setSingleAttribute = (e) => {
         const { name, value } = e.target;
         this.setState({ currentItem: { ...this.state.currentItem, [name]: value } });
+    }
+
+    setNewCategory = (e) => {
+        this.setState({new_category:e.target.value})
+    }
+
+    handleAddCategory = (e) => {
+        e.preventDefault();
+        Request.post("/store/category",{
+            "category":this.state.new_category,
+        }).then(()=>{
+            toast.success('Category Added Successfully');
+            this.getStoreInfo();
+        })
     }
 
     handleAddItem = (e) => {
@@ -147,7 +162,29 @@ export default class extends React.Component {
             </div>
         </nav>
     }
-
+    getAddCategoryModal() {
+        return <div className="modal fade" id="categoryModal" tabIndex="-1">
+            <div className="modal-dialog">
+                <div className="modal-content">
+                    <div className="modal-header">
+                        <h1 className="modal-title fs-5" id="exampleModalLabel">ADD NEW CATEGORY:</h1>
+                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div className="modal-body">
+                        <form className="row row-cols-1 g-4" onSubmit={this.handleAddCategory}>
+                            <div className="col">
+                                <label htmlFor="new_category" className="form-label">Enter category:</label>
+                                <input type="text" name="new_category" value={this.state.new_category} onChange={this.setNewCategory} className="form-control" id="new_category" required />
+                            </div>
+                            <div className="col-12">
+                                <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
     getRemoveItemModal() {
         return <div className="modal fade" id="removeConfirm" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -226,10 +263,6 @@ export default class extends React.Component {
                                     <option value="false">Not Available</option>
                                 </select>
                             </div>
-                            <div className="col">
-                                <label htmlFor="image" className="form-label">Upload Image</label>
-                                <input name="image" type="file" className="form-control" id="image" />
-                            </div>
                             <div className="col-12">
                                 <button type="submit" className="btn btn-primary" data-bs-dismiss="modal">Save</button>
                             </div>
@@ -243,6 +276,16 @@ export default class extends React.Component {
     getStoreView = () =>{
         return <div>
             {this.getAddItemModal()}
+            {this.getAddCategoryModal()}
+            <div className="add-btn">
+                <button type="button" className="btn btn-primary me-1" data-bs-toggle="modal" data-bs-target="#categoryModal">
+                    Add New Category
+                </button>
+        
+                <button type="button" className="btn btn-primary" onClick={this.unsetCurrentItem} data-bs-toggle="modal" data-bs-target="#itemModal">
+                    Add Item
+                </button>
+            </div>
             <div className="items-container">
                 {this.getItems()}
             </div>
@@ -252,11 +295,6 @@ export default class extends React.Component {
     render() {
         return <div className="product-manage">
             {this.getNavbarView()}
-            <div className="add-btn">
-                <button type="button" className="btn btn-primary" onClick={this.unsetCurrentItem} data-bs-toggle="modal" data-bs-target="#itemModal">
-                    Add Item
-                </button>
-            </div>
             <Switch>
                 <Route path={"/store/orders"} render={(props) => <OrderHistory userInfo={this.props.userInfo} {...props} />} />
                 <Route path={"/store/"} component={this.getStoreView} />

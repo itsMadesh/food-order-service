@@ -46,6 +46,22 @@ class StoreManagerController {
         }
     }
 
+    static async addCategory(req, res) {
+        try {
+            const category = req.body.category;
+            const query = { "_id": req.session.user.id };
+            const add = { $push: { categories: category } };
+            const result = await MongoDBClient.stores().updateOne(query, add);
+            res.status(200).json({ "message": "Category added succssfully" });
+
+        }
+        catch (e) {
+            console.log(e);
+            res.status(500).json({ "message": "Unexpected error occured" });
+        }
+
+    }
+
     static async addItem(req, res) {
         const item = {
             "_id": ObjectID(),
